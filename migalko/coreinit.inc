@@ -1,24 +1,24 @@
-Reset: 	LDI R16,Low(RAMEND)		; Инициализация стека
-	  	OUT SPL,R16				; Обязательно!!!
+Reset: 	LDI R16,Low(RAMEND)		; РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃС‚РµРєР°
+	  	OUT SPL,R16				; РћР±СЏР·Р°С‚РµР»СЊРЅРѕ!!!
  
-;		для Mega
+;		РґР»СЏ Mega
 ;	  	LDI R16,High(RAMEND)
 ;	  	OUT SPH,R16
 
 ; Start coreinit.inc ===========================================
-RAM_Flush:	LDI	ZL,Low(SRAM_START)	; Адрес начала ОЗУ в индекс
+RAM_Flush:	LDI	ZL,Low(SRAM_START)	; РђРґСЂРµСЃ РЅР°С‡Р°Р»Р° РћР—РЈ РІ РёРЅРґРµРєСЃ
 			LDI	ZH,High(SRAM_START)
-			CLR	R16					; Очищаем R16
+			CLR	R16					; РћС‡РёС‰Р°РµРј R16
 
-Flush:		ST 	Z+,R16				; Сохраняем 0 в ячейку памяти
-			CPI	ZH,High(RAMEND)		; Достигли конца оперативки?
-			BRNE	Flush			; Нет? Крутимся дальше!
+Flush:		ST 	Z+,R16				; РЎРѕС…СЂР°РЅСЏРµРј 0 РІ СЏС‡РµР№РєСѓ РїР°РјСЏС‚Рё
+			CPI	ZH,High(RAMEND)		; Р”РѕСЃС‚РёРіР»Рё РєРѕРЅС†Р° РѕРїРµСЂР°С‚РёРІРєРё?
+			BRNE	Flush			; РќРµС‚? РљСЂСѓС‚РёРјСЃСЏ РґР°Р»СЊС€Рµ!
  
-			CPI	ZL,Low(RAMEND)		; А младший байт достиг конца?
+			CPI	ZL,Low(RAMEND)		; Рђ РјР»Р°РґС€РёР№ Р±Р°Р№С‚ РґРѕСЃС‚РёРі РєРѕРЅС†Р°?
 			BRNE	Flush
 
 
-			CLR	ZL					; Очищаем индекс
+			CLR	ZL					; РћС‡РёС‰Р°РµРј РёРЅРґРµРєСЃ
 			CLR	ZH
 			CLR	R0
 			CLR	R1
