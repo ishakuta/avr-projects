@@ -1,0 +1,19 @@
+0x0000	rjmp	RESET		; Reset Handler
+0x0001	rjmp	INT0		; External Interrupt0 Handler
+0x0002	rjmp	INT1		; External Interrupt1 Handler
+0x0003	rjmp	TIM1_CAPT	; Timer1 Capture Handler
+0x0004	rjmp	TIM1_COMPA	; Timer1 CompareA Handler
+0x0005	rjmp	TIM1_OVF	; Timer1 Overflow Handler
+0x0006	rjmp	TIM0_OVF	; Timer0 Overflow Handler
+0x0007	rjmp	USART0_RXC	; USART0 RX Complete Handler
+0x0008	rjmp	USART0_DRE	; USART0,UDR Empty Handler
+0x0009	rjmp	USART0_TXC	; USART0 TX Complete Handler
+0x000A	rjmp	ANA_COMP	; Analog Comparator Handler
+0x000B	rjmp	PCINT		; Pin Change Interrupt
+0x000C	rjmp	TIMER1_COMPB	; Timer1 Compare B Handler
+0x000D	rjmp	TIMER0_COMPA	; Timer0 Compare A Handler
+0x000E	rjmp	TIMER0_COMPB	; Timer0 Compare B Handler
+0x000F	rjmp	USI_START	; USI Start Handler
+0x0010	rjmp	USI_OVERFLOW	; USI Overflow Handler
+0x0011	rjmp	EE_READY	; EEPROM Ready Handler
+0x0012	rjmp	WDT_OVERFLOW	; Watchdog Overflow Handler
