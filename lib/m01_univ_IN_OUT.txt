@@ -1,4 +1,4 @@
- 	; universal output ( работает для всех регистров )
+ 	; universal output ( works for all registers )
    	.macro    OUTU
    	.if	@0 < 0x40
       	OUT	@0,@1         
@@ -8,7 +8,7 @@
    	.endm
 	
 	
- 	; universal input ( работает для всех регистров )
+ 	; universal input ( works for all registers )
    	.macro    INU
    	.if	@0 < 0x40
       	IN	@0,@1         

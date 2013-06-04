@@ -1,6 +1,6 @@
-;= Start macro.inc =============================================
+;= Start =============================================
 
-   	; output through R16 ( вывод через регистр R16 )
+   	; output through R16 ( output through R16 )
 	.macro    OUTI          	
       	LDI    R16,@1
    	.if @0 < 0x40
@@ -10,7 +10,7 @@
    	.endif
    	.endm
  
- 	; universal output ( работает для всех регистров )
+ 	; universal output ( works with all registers )
    	.macro    OUTU
    	.if	@0 < 0x40
       	OUT	@0,@1         
