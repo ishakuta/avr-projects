@@ -1,41 +1,20 @@
-.include "tn2313def.inc"	; Используем ATtiny2313
+.include "tn2313def.inc"	; ATtiny2313
 ;= Start macro.inc ========================================
- 
-; Тут будут наши макросы, потом. 
- 
+
 ;= End macro.inc  ========================================
- 
- 
+  
 ; RAM =====================================================
-		.DSEG			; Сегмент ОЗУ
- 
- 
+.DSEG
+  
 ; FLASH ===================================================
-		.CSEG			; Кодовый сегмент
-/*
-                NOP
-                .ORG 0x0010
-M1:             NOP
-                NOP
-                LDI     ZL,low(M2)      ; Загрузили в индекс 
-                LDI     ZH,High(M2)
-
-                IJMP
-
-                NOP
-                NOP
-M2:             NOP
-                RJMP M1
-                NOP
-*/
-
-		LDI R16,Low(RAMEND)	; Инициализация стека
+.CSEG
+		LDI R16,Low(RAMEND)	; init stack
 		OUT SPL,R16
  
 		;LDI R16,High(RAMEND)
 		;OUT SPH,R16
  
-		LDI	R17,0	; Загрузка значений
+		LDI	R17,0	; load values to registers
 		LDI	R18,1
 		LDI	R19,2
 		LDI	R20,3
@@ -46,7 +25,7 @@ M2:             NOP
 		LDI	R25,8
 		LDI	R26,9
  
-		PUSH	R17		; Укладываем значения в стек
+		PUSH	R17		; put values to stack
 		PUSH	R18
 		PUSH	R19
 		PUSH	R20
@@ -58,7 +37,7 @@ M2:             NOP
 		PUSH	R26
  
  
-		POP	R0	; Достаем значения из стека
+		POP	R0	; get values from stack
 		POP	R1
 		POP	R2
 		POP	R3
@@ -71,5 +50,4 @@ M2:             NOP
  
  
 ; EEPROM ==================================================
-		.ESEG			; Сегмент EEPROM
-
+		.ESEG			; EEPROM segment
