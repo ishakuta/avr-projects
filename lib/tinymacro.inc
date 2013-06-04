@@ -1,6 +1,4 @@
-;= Start =============================================
-
-   	; output through R16 ( output through R16 )
+; Output through R16
 	.macro    OUTI          	
       	LDI    R16,@1
    	.if @0 < 0x40
@@ -10,8 +8,8 @@
    	.endif
    	.endm
  
- 	; universal output ( works with all registers )
-   	.macro    OUTU
+; Universal output ( works with all registers )
+   	.macro    UOUT
    	.if	@0 < 0x40
       	OUT	@0,@1         
 	.else
@@ -19,8 +17,7 @@
    	.endif
    	.endm
 
-
-; SET BIT with stack
+; Set bit with stack
 	.MACRO	SETBM 
 	.if @0 < 0x20
 	SBI	@0,@1
@@ -41,7 +38,7 @@
 	.endif
 	.ENDM
  
-;SET BIT with REG
+; Set bit with register
 	.MACRO	SETB
 	.if @0 < 0x20		; Low IO
 	SBI	@0,@1
@@ -172,4 +169,7 @@
 		POP	R16
 		.ENDM
  
-;= End macro.inc  ==============================================
+
+
+ 
+

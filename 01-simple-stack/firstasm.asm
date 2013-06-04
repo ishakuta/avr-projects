@@ -1,18 +1,13 @@
 .include "tn2313def.inc"	; ATtiny2313
 ;= Start macro.inc ========================================
 
-;= End macro.inc  ========================================
-  
 ; RAM =====================================================
 .DSEG
   
 ; FLASH ===================================================
 .CSEG
 		LDI R16,Low(RAMEND)	; init stack
-		OUT SPL,R16
- 
-		;LDI R16,High(RAMEND)
-		;OUT SPH,R16
+		OUT SPL,R16         ; load starting address of the stack to SPL register (stack pointer low)
  
 		LDI	R17,0	; load values to registers
 		LDI	R18,1
