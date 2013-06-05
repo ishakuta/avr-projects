@@ -1,4 +1,4 @@
-.include "tn2313def.inc"   	; Используем ATtiny2313
+.include "tn2313def.inc"
 
 .include "..\macro\tinymacro.inc"		; Подключаем макросы
  
@@ -19,7 +19,7 @@
 
 
 ; Initialisation / Инициалищация ===============================
-.include "coreinit.inc"   ; Подключаем файл с кодом инициализации
+.include "../lib/coreinit.inc"   ; Подключаем файл с кодом инициализации
 
 
 ; Internal Hardware Init  ======================================

@@ -12,7 +12,7 @@
 ; FLASH ========================================================
 		.CSEG
 
-         ; таблица векторов прервываний
+         ; interrupt vector table
 		 .ORG $0000        ; (RESET) 
          RJMP   Reset
          .ORG $0001
@@ -52,7 +52,7 @@
 		 .ORG $0012
          RETI             ; WDT OVERFLOWWatchdog Timer Overflow
  
-	 .ORG   INT_VECTORS_SIZE      	; Конец таблицы прерываний
+	 .ORG   INT_VECTORS_SIZE      	; end of interrupt vector table
 
 ; Interrupts ===================================================
 
@@ -67,7 +67,7 @@
 
 
 ; Initialisation ===============================
-.include "coreinit.inc"
+.include "../lib/coreinit.inc"
 
 
 
@@ -85,8 +85,8 @@
  
 ; Run ==========================================================
 
-		 SEI					; Разрешаем прерывания глобально
-		 LDI	R17,(1<<RXCIE)	; Разрешаем прерывания по приему байта
+		 SEI					; enable interrupts globally
+		 LDI	R17,(1<<RXCIE)	; enable interrupt on recieve byte
 		 OUT 	UCSRB,R17
 
 ; End Run ======================================================

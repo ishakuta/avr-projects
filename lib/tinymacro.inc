@@ -1,3 +1,18 @@
+; Contents
+;
+; OUTI  - Output through R16
+; UOUT  - Universal output ( works with all registers )
+; INU   - Universal input ( works for all registers )
+; SETBM - Set bit using stack
+; SETB  - Set bit with register
+; CLRB  - Clear bit with register
+; CLRBM - Clear bit using stack
+; INVB  - Invert bit with register
+; INVBM - Invert bit with stack
+; INCM  - Increment 4-byte number
+; PUSHF - save SREG byte to stack
+; POPF  - restore SREG byte from stack 
+
 ; Output through R16
 	.macro    OUTI          	
       	LDI    R16,@1
@@ -16,9 +31,18 @@
       	STS	@0,@1
    	.endif
    	.endm
+	
+; Universal input ( works for all registers )
+   	.macro    INU
+   	.if	@0 < 0x40
+      	IN	@0,@1         
+	.else
+      	LDS	@0,@1
+   	.endif
+   	.endm	   	
 
 ; Set bit with stack
-	.MACRO	SETBM 
+	.macro	SETBM 
 	.if @0 < 0x20
 	SBI	@0,@1
 	.else
@@ -36,10 +60,10 @@
 			POP	R17
 		.endif
 	.endif
-	.ENDM
+	.endm
  
 ; Set bit with register
-	.MACRO	SETB
+	.macro	SETB
 	.if @0 < 0x20		; Low IO
 	SBI	@0,@1
 	.else
@@ -53,11 +77,10 @@
 			STS	@0,@2
 		.endif
 	.endif
-	.ENDM
+	.endm
 
-;.............................................................
-;Clear BIT with REG
-	.MACRO	CLRB
+; Clear bit with register
+	.macro	CLRB
 	.if @0 < 0x20			; Low IO
 	CBI	@0,@1
 	.else
@@ -71,10 +94,10 @@
 			STS	@0,@2
 		.endif
 	.endif
-	.ENDM
+	.endm
  
-;Clear BIT with STACK
-	.MACRO	CLRBM 
+; Clear bit using stack
+	.macro	CLRBM 
 	.if @0 < 0x20
 	CBI	@0,@1
 	.else
@@ -92,11 +115,10 @@
 			POP	R17
 		.endif
 	.endif
-	.ENDM
-;.............................................................
+	.endm
  
- 	; invert bit with reg
-	.MACRO	INVB
+; Invert bit with register
+	.macro	INVB
 	.if	@0 < 0x40
 		IN	@2,@0
 		LDI	@3,1<<@1
@@ -108,10 +130,10 @@
 		EOR	@2,@3
 		STS	@0,@2
 	.endif
-	.ENDM
+	.endm
  
- 	; invert bit with STACK
-	.MACRO	INVBM
+; Invert bit with stack
+	.macro	INVBM
 	.if	@0 < 0x40
 		PUSH	R16
 		PUSH	R17
@@ -131,11 +153,10 @@
 		POP	R17
 		POP	R16
 	.endif
-	.ENDM
+	.endm
 
-
-; increment 4-byte number macro
-	.MACRO	INCM
+; Increment 4-byte number
+	.macro	INCM
 	; load data to registers from RAM
 	LDS	R16,@0
 	LDS	R17,@0+1
@@ -153,21 +174,21 @@
 	STS	@0+1,R17
 	STS	@0+2,R18
 	STS	@0+3,R19
-	.ENDM
+	.endm
 
 ; save SREG byte to stack
-		.MACRO PUSHF
+		.macro PUSHF
 		PUSH	R16
 		IN	R16,SREG
 		PUSH	R16
-		.ENDM
+		.endm
  
 ; restore SREG byte from stack 
-		.MACRO POPF
+		.macro POPF
 		POP	R16
 		OUT	SREG,R16
 		POP	R16
-		.ENDM
+		.endm
  
 
 

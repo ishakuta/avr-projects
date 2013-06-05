@@ -1,10 +1,10 @@
-.include "tn2313def.inc"   	; Используем ATtiny2313
+.include "tn2313def.inc"
 
-.include "..\macro\tinymacro.inc"		; Подключаем макросы
+.include "..\macro\tinymacro.inc"
  
  
 ; RAM ==========================================================
-		.DSEG			; Сегмент ОЗУ
+		.DSEG
 
 	CCNT:	.byte	4
 	TCNT:	.byte	4
@@ -13,9 +13,9 @@
 
 
 ; FLASH ========================================================
-		.CSEG			; Кодовый сегмент
+		.CSEG
 
-	; таблица векторов прервываний
+	; interrupt vector table
 
 		 .ORG $0000        
          RJMP   Reset	  ;  (RESET) 
@@ -74,7 +74,7 @@
 		 .ORG WDTaddr
          RETI             ; WDT OVERFLOWWatchdog Timer Overflow
  
-	 	.ORG   INT_VECTORS_SIZE      	; Конец таблицы прерываний
+	 	.ORG   INT_VECTORS_SIZE      	; interrupt vector table end
 
 
 ; Interrupts ===================================================
@@ -98,7 +98,7 @@
 
 
 ; Initialisation / Инициалищация ===============================
-.include "coreinit.inc"   ; Подключаем файл с кодом инициализации
+.include "../lib/coreinit.inc"   ; Подключаем файл с кодом инициализации
 
 
 ; Internal Hardware Init  ======================================
