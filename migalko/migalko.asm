@@ -1,61 +1,44 @@
 .include "tn2313def.inc"
 
-.include "..\macro\tinymacro.inc"		; Подключаем макросы
+.include "..\macro\tinymacro.inc"
  
  
 ; RAM ==========================================================
-		.DSEG			; Сегмент ОЗУ
-
-; END RAM ======================================================
-
+		.DSEG
 
 ; FLASH ========================================================
-		.CSEG			; Кодовый сегмент
+		.CSEG
 
 ; Interrupts ===================================================
 
 
-; End Interrupts ===============================================
-
-
-; Initialisation / Инициалищация ===============================
-.include "../lib/coreinit.inc"   ; Подключаем файл с кодом инициализации
+; Initialisation                 ===============================
+.include "../lib/coreinit.inc"
 
 
 ; Internal Hardware Init  ======================================
-	; установка пинов порта D на выход
+	; set port D pins to output
 	SETB	DDRD,2,R16	; DDRD.2 = 1
 	SETB	DDRD,4,R16	; DDRD.4 = 1
 	SETB	DDRD,5,R16	; DDRD.5 = 1
 
-	; инициализация пина, на котором кнопка, на вход
-	SETB	PORTD,6,R16	; устанавливаем 6 бит регистра PORTD в 1 - pullUp режим
-	CLRB	DDRD,6,R16	; устанавливаем пин в 0 - pullUp
+	; init pin connected to button, input
+	SETB	PORTD,6,R16	; set 6th bit of the register PORTD to 1 - pullUp mode
+	CLRB	DDRD,6,R16	; set pin to 0 - pullUp
 
-; End Internal Hardware Init ===================================
-
- 
 ; External Hardware Init  ======================================
- 
-; End Internal Hardware Init ===================================
-
  
 ; Run ==========================================================
 
-
-; End Run ======================================================
-
-
-; Main =========================================================
 Main:
-		SBIS	PIND,6				; Если кнопка нажата - переход
+		SBIS	PIND,6			; if button pressed - go to BT_Push
 		RJMP	BT_Push
 
 
-		SETB	PORTD,4			; Зажгем LED1
-		CLRB	PORTD,2			; Погасим LED0
+		SETB	PORTD,4			; light up LED1
+		CLRB	PORTD,2			; turn off LED0
  
-Next:	INVB	PORTD,5,R16,R17		; Инвертировали LED2
+Next:	INVB	PORTD,5,R16,R17			; invert LED2 state
  
 		RCALL 	Delay
  
@@ -63,34 +46,27 @@ Next:	INVB	PORTD,5,R16,R17		; Инвертировали LED2
  
  
 BT_Push:
-		SETB	PORTD,2			; Зажгем LED0
-		CLRB	PORTD,4			; Погасим LED1
+		SETB	PORTD,2			; light up LED0
+		CLRB	PORTD,4			; turn off LED1
  
 		RJMP	Next
-
-
-; End Main =====================================================
-
-
 
 ; Procedure ====================================================
 .equ 	LowByte  = 100
 .equ	MedByte  = 100
 .equ	HighByte = 0
  
-Delay:	LDI	R16,LowByte	; Грузим три байта
-		LDI	R17,MedByte	; Нашей выдержки
+Delay:	LDI	R16,LowByte		; load 3 bytes
+		LDI	R17,MedByte	; variable for delay
 		LDI	R18,HighByte
 
  
-loop:	SUBI	R16,1		; Вычитаем 1
-		SBCI	R17,0		; Вычитаем только С
-		SBCI	R18,0		; Вычитаем только С
+loop:	SUBI	R16,1			; subtract 1
+		SBCI	R17,0		; subtract only C
+		SBCI	R18,0		; subtract only C
  
-		BRCC	Loop		; Если нет переноса - переход 
+		BRCC	loop		; if no transfer - go to loop
 		RET
-; End Procedure ================================================
-
 
 ; EEPROM =======================================================
-		.ESEG			; Сегмент EEPROM
+		.ESEG
