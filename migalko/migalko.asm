@@ -57,11 +57,11 @@ BT_Push:
 .equ	HighByte = 0
  
 Delay:	LDI	R16,LowByte		; load 3 bytes
-		LDI	R17,MedByte	; variable for delay
+		LDI	R17,MedByte		; variable for delay
 		LDI	R18,HighByte
 
  
-loop:	SUBI	R16,1			; subtract 1
+loop:	SUBI	R16,1		; subtract 1
 		SBCI	R17,0		; subtract only C
 		SBCI	R18,0		; subtract only C
  
