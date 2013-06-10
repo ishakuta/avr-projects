@@ -1,5 +1,6 @@
 ; Contents
 ;
+; LDIL  - Load number to any register: LDI low
 ; OUTI  - Output through R16
 ; UOUT  - Universal output ( works with all registers )
 ; INU   - Universal input ( works for all registers )
@@ -12,6 +13,14 @@
 ; INCM  - Increment 4-byte number
 ; PUSHF - save SREG byte to stack
 ; POPF  - restore SREG byte from stack 
+
+; Load number to any register: LDI low, example: LDIL  R0, 23
+	.macro LDIL
+		PUSH	R17	; save one of major register's value to stack
+		LDI	R17,@1	; load our value to it
+		MOV	@0,R17	; move value to minor register. 
+		POP 	R17	; restore old value from stack
+	.endm
 
 ; Output through R16
 	.macro    OUTI          	
