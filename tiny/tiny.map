@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.1.42  F:\tiny\tiny.asm Tue Jun 11 00:26:26 2013
+AVRASM ver. 2.1.42  G:\tiny\tiny.asm Sun Jul 28 16:39:12 2013
 
 
 EQU  SIGNATURE_000 0000001e
@@ -448,5 +448,8 @@ EQU  USI_OVFaddr  00000010
 EQU  ERDYaddr     00000011
 EQU  WDTaddr      00000012
 EQU  INT_VECTORS_SIZE 00000013
-CSEG M1           00000012
-CSEG M2           00000014
+CSEG Reset        00000015
+CSEG RX_OK        00000013
+CSEG RAM_Flush    00000017
+CSEG Flush        0000001a
+CSEG Main         00000029

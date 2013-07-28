@@ -1,2 +1,2 @@
 @ECHO OFF
-"C:\Program Files\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "F:\tiny\labels.tmp" -fI -W+ie -C V2 -o "F:\tiny\tiny.hex" -d "F:\tiny\tiny.obj" -e "F:\tiny\tiny.eep" -m "F:\tiny\tiny.map" "F:\tiny\tiny.asm"
+"C:\Program Files\Atmel\AVR Tools\AvrAssembler2\avrasm2.exe" -S "G:\tiny\labels.tmp" -fI -W+ie -C V2 -o "G:\tiny\tiny.hex" -d "G:\tiny\tiny.obj" -e "G:\tiny\tiny.eep" -m "G:\tiny\tiny.map" "G:\tiny\tiny.asm"
