@@ -1,5 +1,4 @@
 ; http://easyelectronics.ru/avr-uchebnyj-kurs-vazhnye-melochi-1.html
-
 Reset: 		LDI R16,Low(RAMEND)	; init stack
 			OUT SPL,R16         ; load starting address of the stack to SPL register (stack pointer low)
  
