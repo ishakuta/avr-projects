@@ -1,1 +1,11 @@
 .DS_Store
+
+*.bat
+
+*.tmp
+
+*.aws
+
+*.map
+
+*.obj

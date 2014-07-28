@@ -1,4 +1,4 @@
-.include "../lib/tn2313def.inc"	; ATtiny2313
+.include "tn2313def.inc"	; ATtiny2313
 .include "../lib/tinymacro.inc"
 
 ; RAM =====================================================
@@ -25,9 +25,9 @@
 ; End Run ======================================================
 
 ; Main =========================================================
-Main:   RCALL	uart_rcv	; Ждем байта
-		INC		R16			; Делаем с ним что-то
-		RCALL	uart_snd	; Отправляем обратно.
+Main:   RCALL	uart_rcv	; wait for a byte
+		INC		R16			; increment it
+		RCALL	uart_snd	; send it back
  
 		RJMP	Main
 ; End Main =====================================================
@@ -53,15 +53,15 @@ uart_init:	LDI 	R16, low(bauddivider)
 
 			RET
 
-uart_snd:	SBIS	UCSRA, UDRIE 	; Пропуск если нет флага готовности
-			RJMP	uart_snd 		; ждем готовности - флага UDRE
-			OUT		UDR, R16		; шлем байт
+uart_snd:	SBIS	UCSRA, UDRIE 	; skip if no flag: ready
+			RJMP	uart_snd 		; wait till ready - flag UDRE
+			OUT		UDR, R16		; send byte
 			RET
 
-uart_rcv:	SBIS	UCSRA, RXC	; Ждем флага прихода байта
-			RJMP	uart_rcv	; вращаясь в цикле
+uart_rcv:	SBIS	UCSRA, RXC		; wait for receive byte flag
+			RJMP	uart_rcv		; in a loop
  
-			IN	R16, UDR		; байт пришел - забираем.
+			IN	R16, UDR			; byte received - get it
 			RET
 ; End Procedure ================================================
 
