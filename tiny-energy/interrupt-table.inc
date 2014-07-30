@@ -15,11 +15,11 @@
 .ORG $0006		; (TIMER0) OVFTimer/Counter0 Overflow
 	RETI            
 .ORG $0007		; (USART) USART, Rx Complete
-	RETI
+	RJMP	RX_OK
 .ORG $0008		; (USART, UDRE) USART Data Register Empty
-	RETI             
+	RJMP	UD_OK             
 .ORG $0009		; (USART, TXUSART0) USART, Tx Complete
-	RETI             
+	RJMP	TX_OK             
 .ORG $000A		; (ANA_COMP) ANALOG COMPAnalog Comparator
 	RETI             
 .ORG $000B		; PCINTPin Change Interrupt
@@ -41,5 +41,22 @@
 .ORG   INT_VECTORS_SIZE		; end of interrupt vector table
 
 ; Interrupt handlers ---------------------------------------------------
+RX_OK:	PUSHF			; put SREG to R16
+ 
+		IN	R16, UDR	; It's necessary to get byte from UDR otherwise 
+						; interrupt flag will remain active
+						; Can be handled here, if there's enough time
+ 
+		CPI	R16, Value	; e.g.: compare read value with Value
+		BRNE	 NXT	; and go to NXT if R16 != Value
+		Action1			; Some payload. Don't forget about save regs to stack
 
+NXT:	CPI	R16, Value2
+		BRNE	RX_Exit
+		Action2			; Делаем что нибудь ценное2
+ 
+Rx_Exit:
+		POPF			; Достаем SREG и R16
+		RETI
+		
 ; End interrupt handlers -----------------------------------------------
