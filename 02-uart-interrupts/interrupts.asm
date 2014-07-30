@@ -65,16 +65,9 @@
 
 ; End Interrupts ===============================================
 
-
-; Initialisation ===============================
-.include "../lib/coreinit.inc"
-
-
-
-
-
 ; Internal Hardware Init  ======================================
- 
+ Reset:   	STACKINIT
+		RAMFLUSH
 ; End Internal Hardware Init ===================================
 
  
