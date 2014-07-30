@@ -11,12 +11,10 @@
 
 ; Interrupts ===================================================
 
-
-; Initialisation                 ===============================
-.include "../lib/coreinit.inc"
-
-
 ; Internal Hardware Init  ======================================
+Reset:   	STACKINIT
+		RAMFLUSH
+
 	; set port D pins to output
 	SETB	DDRD,2,R16	; DDRD.2 = 1
 	SETB	DDRD,4,R16	; DDRD.4 = 1
