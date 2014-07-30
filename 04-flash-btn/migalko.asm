@@ -96,13 +96,10 @@
 
 ; End Interrupts ===============================================
 
-
-; Initialisation / Инициалищация ===============================
-.include "coreinit.inc"   ; Подключаем файл с кодом инициализации
-
-
 ; Internal Hardware Init  ======================================
-
+Reset:   	STACKINIT
+		RAMFLUSH
+		
 	; установка пинов порта D на выход (для светиков)
 	SETB	DDRD,2,R16	; DDRD.2 = 1
 	SETB	DDRD,3,R16	; DDRD.3 = 1
