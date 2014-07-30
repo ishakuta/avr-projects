@@ -1,4 +1,5 @@
 ; Contents
+; http://easyelectronics.ru/avr-uchebnyj-kurs-vazhnye-melochi-1.html
 ;
 ; LDIL  - Load number to any register: LDI low
 ; OUTI  - Output through R16
@@ -13,45 +14,48 @@
 ; INCM  - Increment 4-byte number
 ; PUSHF - save SREG byte to stack
 ; POPF  - restore SREG byte from stack 
+; RAMFLUSH  - flush RAM
+; INITSTACK - init stack
+; TX_OK 	- UART interrupts enable all
 
 ; Load number to any register: LDI low, example: LDIL  R0, 23
-	.macro LDIL
+	.MACRO LDIL
 		PUSH	R17	; save one of major register's value to stack
 		LDI	R17,@1	; load our value to it
 		MOV	@0,R17	; move value to minor register. 
 		POP 	R17	; restore old value from stack
-	.endm
+	.ENDM
 
 ; Output through R16
-	.macro    OUTI          	
+	.MACRO    OUTI          	
       	LDI    R16,@1
    	.if @0 < 0x40
       	OUT    @0,R16       
    	.else
       	STS      @0,R16
    	.endif
-   	.endm
+   	.ENDM
  
 ; Universal output ( works with all registers )
-   	.macro    UOUT
+   	.MACRO    UOUT
    	.if	@0 < 0x40
       	OUT	@0,@1         
 	.else
       	STS	@0,@1
    	.endif
-   	.endm
+   	.ENDM
 	
 ; Universal input ( works for all registers )
-   	.macro    INU
+   	.MACRO    INU
    	.if	@0 < 0x40
       	IN	@0,@1         
 	.else
       	LDS	@0,@1
    	.endif
-   	.endm	   	
+   	.ENDM	   	
 
 ; Set bit with stack
-	.macro	SETBM 
+	.MACRO	SETBM 
 	.if @0 < 0x20
 	SBI	@0,@1
 	.else
@@ -69,10 +73,10 @@
 			POP	R17
 		.endif
 	.endif
-	.endm
+	.ENDM
  
 ; Set bit with register
-	.macro	SETB
+	.MACRO	SETB
 	.if @0 < 0x20		; Low IO
 	SBI	@0,@1
 	.else
@@ -86,10 +90,10 @@
 			STS	@0,@2
 		.endif
 	.endif
-	.endm
+	.ENDM
 
 ; Clear bit with register
-	.macro	CLRB
+	.MACRO	CLRB
 	.if @0 < 0x20			; Low IO
 	CBI	@0,@1
 	.else
@@ -103,10 +107,10 @@
 			STS	@0,@2
 		.endif
 	.endif
-	.endm
+	.ENDM
  
 ; Clear bit using stack
-	.macro	CLRBM 
+	.MACRO	CLRBM 
 	.if @0 < 0x20
 	CBI	@0,@1
 	.else
@@ -124,10 +128,10 @@
 			POP	R17
 		.endif
 	.endif
-	.endm
+	.ENDM
  
 ; Invert bit with register
-	.macro	INVB
+	.MACRO	INVB
 	.if	@0 < 0x40
 		IN	@2,@0
 		LDI	@3,1<<@1
@@ -139,10 +143,10 @@
 		EOR	@2,@3
 		STS	@0,@2
 	.endif
-	.endm
+	.ENDM
  
 ; Invert bit with stack
-	.macro	INVBM
+	.MACRO	INVBM
 	.if	@0 < 0x40
 		PUSH	R16
 		PUSH	R17
@@ -162,10 +166,10 @@
 		POP	R17
 		POP	R16
 	.endif
-	.endm
+	.ENDM
 
 ; Increment 4-byte number
-	.macro	INCM
+	.MACRO	INCM
 	; load data to registers from RAM
 	LDS	R16,@0
 	LDS	R17,@0+1
@@ -183,23 +187,59 @@
 	STS	@0+1,R17
 	STS	@0+2,R18
 	STS	@0+3,R19
-	.endm
+	.ENDM
 
 ; save SREG byte to stack
-		.macro PUSHF
+		.MACRO PUSHF
 		PUSH	R16
 		IN	R16,SREG
 		PUSH	R16
-		.endm
+		.ENDM
  
 ; restore SREG byte from stack 
-		.macro POPF
+		.MACRO POPF
 		POP	R16
 		OUT	SREG,R16
 		POP	R16
-		.endm
- 
+		.ENDM
 
+; flush RAM
+.MACRO RAMFLUSH
+RAM_Flush:	LDI	ZL, Low(SRAM_START)	 ; put starting address of RAM to Z (low) index
+			LDI	ZH, High(SRAM_START) ; put starting address of RAM to Z (high) index
+			CLR	R16					 ; clear R16
+
+; init all RAM cells with 0 at startup
+Flush:	ST 	Z+, R16				 ; save 0 to memory cell
+		CPI	ZH, High(RAMEND+1)	 ; is it the end of the RAM already?
+		BRNE	Flush			 ; if no - going back to Flush
+
+		CPI	ZL, Low(RAMEND+1)	 ; is lower byte at the end of the RAM?
+		BRNE	Flush
+
+		; clear common registers (R00-R31, aka RON in russian, in 10-byte code)
+		LDI	ZL, 30				; address of the senior register
+		CLR	ZH					; zero here
+		DEC	ZL					; decreasing address
+		ST	Z, ZH				; write 0 to register
+		BRNE	PC-2			; go ahead for all registers
+.ENDM
+
+; init stack
+.MACRO 	STACKINIT
+		LDI R16, Low(RAMEND)	; init stack
+		OUT SPL, R16         	; load starting address of the stack to SPL register (stack pointer low)
+
+		; for Mega devices with more RAM
+		;LDI R16, High(RAMEND)
+		;OUT SPH, R16        ; stack pointer high
+.ENDM
+
+; UART interrupts enable all
+.MACRO	TX_RUN
+		LDI 	R16, (1<<RXEN)|(1<<TXEN)|(1<<RXCIE)|(1<<TXCIE)|(1<<UDRIE)
+		OUT 	UCSRB, R16	
+.ENDM
 
  
 
